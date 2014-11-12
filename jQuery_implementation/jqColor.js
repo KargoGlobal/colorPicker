@@ -89,7 +89,7 @@
 						};
 
 					for (var n in config) {
-						initConfig[n] = config[n]; 
+						initConfig[n] = config[n];
 					}
 					return new initConfig.klass(initConfig);
 				},
@@ -137,8 +137,8 @@
 								isColorPicker = $(e.target).closest('.cp-app')[0],
 								inputIndex = $(that).index(e.target);
 
-							if (isColorPicker && $(colorPickers).index(isColorPicker)) {
-								if (e.target === colorPicker.nodes.exit) {
+							if (isColorPicker && $(colorPicker).index(isColorPicker)) {
+								if (colorPicker && $colorPicker && e.target === colorPicker.nodes.exit) {
 									$colorPicker.hide(animationSpeed);
 									$(':focus').trigger('blur');
 								} else {
@@ -147,7 +147,7 @@
 								}
 							} else if (inputIndex !== -1) {
 								// input fireld
-							} else {
+							} else if ($colorPicker) {
 								$colorPicker.hide(animationSpeed);
 							}
 						});
