@@ -87,7 +87,8 @@
 							size: $.docCookies('colorPickerSize') || 1,
 							renderCallback: renderCallback,
 							actionCallback: actionCallback,
-							showCallback: function() {}
+							showCallback: function() {},
+							hideCallback: function() {}
 						};
 
 					for (var n in config) {
