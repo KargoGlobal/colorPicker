@@ -165,7 +165,7 @@
 								}
 							} else if (inputIndex !== -1) {
 								// input fireld
-							} else if ($colorPicker) {
+							} else if (colorPicker && $colorPicker) {
 								var hideCallback = colorPicker.color.options.hideCallback;
 								$colorPicker.hide(animationSpeed, hideCallback);
 							}
