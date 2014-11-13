@@ -87,7 +87,7 @@
 					};
 
 				for (var n in config) {
-					initConfig[n] = config[n]; 
+					initConfig[n] = config[n];
 				}
 				return new initConfig.klass(initConfig);
 			},
@@ -103,7 +103,7 @@
 							colorPickerUI = colorPicker.nodes.colorPicker;
 
 						options.color = elm.value; // brings color to default on reset
-						colorPickerUI.style.cssText = 
+						colorPickerUI.style.cssText =
 							'position: absolute;' +
 							'left:' + (position.left + options.margin.left) + 'px;' +
 							'top:' + (position.top + +input.offsetHeight + options.margin.top) + 'px;';
@@ -115,7 +115,7 @@
 							colorPicker.saveAsBackground();
 						}
 						colorPickers.current = colorPickers[index];
-						(options.appenTo || document.body).appendChild(colorPickerUI);
+						(options.appendTo || document.body).appendChild(colorPickerUI);
 						setTimeout(function() { // compensating late style on onload in colorPicker
 							colorPickerUI.style.display = 'block';
 						}, 0);
