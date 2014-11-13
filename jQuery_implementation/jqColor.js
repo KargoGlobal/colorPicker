@@ -156,7 +156,8 @@
 
 							if (isColorPicker && $(colorPicker).index(isColorPicker)) {
 								if (colorPicker && $colorPicker && e.target === colorPicker.nodes.exit) {
-									$colorPicker.hide(animationSpeed, colorPicker.color.options.hideCallback);
+									var hideCallback = colorPicker.color.options.hideCallback;
+									$colorPicker.hide(animationSpeed, hideCallback);
 									$(':focus').trigger('blur');
 								} else {
 									// buttons on colorPicker don't work any more
@@ -165,7 +166,8 @@
 							} else if (inputIndex !== -1) {
 								// input fireld
 							} else if ($colorPicker) {
-								$colorPicker.hide(animationSpeed, colorPicker.color.options.hideCallback);
+								var hideCallback = colorPicker.color.options.hideCallback;
+								$colorPicker.hide(animationSpeed, hideCallback);
 							}
 						});
 					}
