@@ -71,6 +71,7 @@
 							isIE8: !!document.all && !document.addEventListener, // Opera???
 							animationSpeed: 200,
 							draggable: true,
+							position: false,
 							margin: {left: -1, top: 2},
 							customBG: '#FFFFFF',
 							// displayCallback: displayCallback,
@@ -85,7 +86,8 @@
 							memoryColors: $.docCookies('colorPickerMemos' + ((config || {}).noAlpha ? 'NoAlpha' : '')),
 							size: $.docCookies('colorPickerSize') || 1,
 							renderCallback: renderCallback,
-							actionCallback: actionCallback
+							actionCallback: actionCallback,
+							showCallback: function() {}
 						};
 
 					for (var n in config) {
@@ -103,17 +105,25 @@
 							colorPicker = colorPickers[index] ||
 								(colorPickers[index] = createInstance(this, config)),
 							options = colorPicker.color.options,
-							$colorPicker = $.ui && options.draggable ?
-							$(colorPicker.nodes.colorPicker).draggable(
-								{cancel: '.' + options.CSSPrefix + 'app div'}
-							) : $(colorPicker.nodes.colorPicker);
+							draggableOptions = {cancel: '.' + options.CSSPrefix + 'app div'};
 
-						options.color = options.color || elm.value; // brings color to default on reset
-						$colorPicker.css({
-							'position': 'absolute',
-							'left': position.left + options.margin.left,
-							'top': position.top + +$input.outerHeight(true) + options.margin.top
-						});
+						if (options.draggable !== false && $.isPlainObject(options.draggable)) {
+							draggableOptions = $.extend(draggableOptions, options.draggable);
+						}
+
+						var $colorPicker = $.ui && options.draggable ?
+							$(colorPicker.nodes.colorPicker).draggable(draggableOptions) : $(colorPicker.nodes.colorPicker);
+
+						options.color = elm.value || options.color; // brings color to default on reset
+
+						if (options.position === false) {
+							$colorPicker.css({
+								'position': 'absolute',
+								'left': position.left + options.margin.left,
+								'top': position.top + +$input.outerHeight(true) + options.margin.top
+							});
+						}
+
 						if (!multiple) {
 							options.input = elm;
 							options.patch = elm; // check again???
@@ -123,7 +133,13 @@
 						colorPickers.current = colorPickers[index];
 						$(options.appendTo || document.body).append($colorPicker);
 						setTimeout(function() { // compensating late style on onload in colorPicker
-							$colorPicker.show(colorPicker.color.options.animationSpeed);
+							$colorPicker.show(colorPicker.color.options.animationSpeed, function() {
+								colorPicker.color.options.showCallback.call(this);
+
+								if ($.isPlainObject(colorPicker.color.options.position)) {
+									$colorPicker.position(colorPicker.color.options.position);
+								}
+							});
 						}, 0);
 					});
 
@@ -172,7 +188,7 @@
 						value;
 
 					if (config && config.color) {
-						originalValue = config.color;
+						originalValue = elm.value = config.color;
 					}
 
 					value = originalValue.split('(');
