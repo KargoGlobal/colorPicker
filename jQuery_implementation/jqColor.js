@@ -108,7 +108,7 @@
 								{cancel: '.' + options.CSSPrefix + 'app div'}
 							) : $(colorPicker.nodes.colorPicker);
 
-						options.color = elm.value; // brings color to default on reset
+						options.color = options.color || elm.value; // brings color to default on reset
 						$colorPicker.css({
 							'position': 'absolute',
 							'left': position.left + options.margin.left,
@@ -117,7 +117,7 @@
 						if (!multiple) {
 							options.input = elm;
 							options.patch = elm; // check again???
-							colorPicker.setColor(elm.value, undefined, undefined, true);
+							colorPicker.setColor(options.color, undefined, undefined, true);
 							colorPicker.saveAsBackground();
 						}
 						colorPickers.current = colorPickers[index];
@@ -168,13 +168,20 @@
 						colorPickers[idx].destroyAll();
 					}
 				} else {
-					var value = elm.value.split('(');
+					var originalValue = elm.value,
+						value;
+
+					if (config && config.color) {
+						originalValue = config.color;
+					}
+
+					value = originalValue.split('(');
 					$(elm).data('colorMode', value[1] ? value[0].substr(0, 3) : 'HEX');
 					doEventListeners(elm, (config && config.multipleInstances), false);
 					if (config && config.readOnly) {
 						elm.readOnly = true;
 					}
-					testColors.setColor(elm.value);
+					testColors.setColor(originalValue);
 					if (config && config.init) {
 						config.init(elm, testColors.colors);
 					}
