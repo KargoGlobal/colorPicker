@@ -185,7 +185,8 @@
 	};
 
 	ColorPicker.prototype.loadMemoryColors = function(memory) {
-		var _nodes = this.nodes;
+		var _nodes = this.nodes,
+			tmp;
 
 		if (typeof memory === 'string') { // revisit!!!
 			memory = memory.replace(/^'|'$/g, '').replace(/\s*/, '').split('\',\'');
