@@ -184,6 +184,22 @@
 		html = null;
 	};
 
+	ColorPicker.prototype.loadMemoryColors = function(memory) {
+		var _nodes = this.nodes;
+
+		if (typeof memory === 'string') { // revisit!!!
+			memory = memory.replace(/^'|'$/g, '').replace(/\s*/, '').split('\',\'');
+		}
+		for (var n = _nodes.memos.length; n--; ) { // check again how to handle alpha...
+			if (memory && typeof memory[n] === 'string') {
+				tmp = memory[n].replace('rgba(', '').replace(')', '').split(',');
+				memory[n] = {r: tmp[0], g: tmp[1], b: tmp[2], a: tmp[3]}
+			}
+			_nodes.memos[n].style.cssText = 'background-color: ' + (memory && memory[n] !== undefined ?
+				color2string(memory[n]) + ';' + getOpacityCSS(memory[n]['a'] || 1) : 'rgb(0,0,0);');
+		}
+	};
+
 	// ------------------------------------------------------ //
 
 	function initInstance(THIS, options) {
@@ -237,18 +253,7 @@
 			_nodes.colorPicker.className += ' no-alpha'; // IE6 ??? maybe for IE6 on document.body
 		}
 
-		memory = _options.memoryColors;
-		if (typeof memory === 'string') { // revisit!!!
-			memory = memory.replace(/^'|'$/g, '').replace(/\s*/, '').split('\',\'');
-		}
-		for (var n = _nodes.memos.length; n--; ) { // check again how to handle alpha...
-			if (memory && typeof memory[n] === 'string') {
-				tmp = memory[n].replace('rgba(', '').replace(')', '').split(',');
-				memory[n] = {r: tmp[0], g: tmp[1], b: tmp[2], a: tmp[3]}
-			}
-			_nodes.memos[n].style.cssText = 'background-color: ' + (memory && memory[n] !== undefined ?
-				color2string(memory[n]) + ';' + getOpacityCSS(memory[n]['a'] || 1) : 'rgb(0,0,0);');
-		}
+		THIS.loadMemoryColors(_options.memoryColors);
 
 		installEventListeners(THIS);
 
